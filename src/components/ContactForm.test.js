@@ -74,11 +74,19 @@ test('renders "email must be a valid email address" if an invalid email is enter
 
 });
 
-// //the component renders the text "lastName is a required field" the form is submitted without a last name.
-// test('renders "lastName is a required field" if an last name is not entered and the submit button is clicked', async () => {
-//     render(<ContactForm/>);
+//the component renders the text "lastName is a required field" the form is submitted without a last name.
+test('renders "lastName is a required field" if an last name is not entered and the submit button is clicked', async () => {
+    render(<ContactForm/>);
 
-// });
+    const lastname = screen.getByLabelText(/last name*/i);
+    const button = screen.getByRole('button');
+    userEvent.type(lastname, '');
+    userEvent.click(button);
+
+    const error = await screen.findByText(/lastName is a required field/i);
+    expect(error).toBeInTheDocument();
+
+});
 
 // //the component renders the firstname, lastname and email text when submitted with valued fields and does not render a message value when one is not entered into the message field.
 // test('renders all firstName, lastName and email text when submitted. Does NOT render message if message is not submitted.', async () => {
