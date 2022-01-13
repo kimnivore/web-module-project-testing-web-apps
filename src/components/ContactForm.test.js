@@ -78,9 +78,9 @@ test('renders "email must be a valid email address" if an invalid email is enter
 test('renders "lastName is a required field" if an last name is not entered and the submit button is clicked', async () => {
     render(<ContactForm/>);
 
-    const lastname = screen.getByLabelText(/last name*/i);
+    // const lastname = screen.getByLabelText(/last name*/i);
     const button = screen.getByRole('button');
-    userEvent.type(lastname, '');
+    // userEvent.type(lastname, '');
     userEvent.click(button);
 
     const error = await screen.findByText(/lastName is a required field/i);
@@ -88,11 +88,32 @@ test('renders "lastName is a required field" if an last name is not entered and 
 
 });
 
-// //the component renders the firstname, lastname and email text when submitted with valued fields and does not render a message value when one is not entered into the message field.
-// test('renders all firstName, lastName and email text when submitted. Does NOT render message if message is not submitted.', async () => {
-//     render(<ContactForm/>);
+//the component renders the firstname, lastname and email text when submitted with valued fields and does not render a message value when one is not entered into the message field.
+test('renders all firstName, lastName and email text when submitted. Does NOT render message if message is not submitted.', async () => {
+    render(<ContactForm/>);
 
-// });
+    const firstname = screen.getByLabelText(/first name*/i);
+    const lastname = screen.getByLabelText(/last name*/i);
+    const email = screen.getByLabelText(/email*/i);
+    const button = screen.getByRole('button');
+    userEvent.type(firstname, 'kimmy');
+    userEvent.type(lastname, 'nguyen');
+    userEvent.type(email, 'kim@kim.com');
+    userEvent.click(button);
+    
+
+    await waitFor(() => {
+        const firstnameDisplay = screen.queryByText('kimmy');
+        const lastnameDisplay = screen.queryByText('nguyen');
+        const emailDisplay =  screen.queryByText('kim@kim.com');
+        const messageDisplay = screen.queryByTestId('messageDisplay');
+
+        expect(firstnameDisplay).toBeInTheDocument();
+        expect(lastnameDisplay).toBeInTheDocument();
+        expect(emailDisplay).toBeInTheDocument();
+        expect(messageDisplay).not.toBeInTheDocument();
+    });
+});
 
 // // renders all fields when the user submits with valid text filled in for all fields.
 // test('renders all fields text when all fields are submitted.', async () => {
